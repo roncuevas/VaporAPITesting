@@ -16,5 +16,29 @@ func routes(_ app: Application) throws {
         }
     }
     
+    let protected = app.grouped(UserAuthenticator())
+    protected.get("me") { req -> String in
+        try req.auth.require(User.self)
+        return "El nombre es \(String(describing: req.auth.get(User.self)?.name))"
+    }
+    
     try app.register(collection: TodoController())
 }
+
+struct UserAuthenticator: AsyncBearerAuthenticator {
+    typealias User = App.User
+
+    func authenticate(
+        bearer: BearerAuthorization,
+        for request: Request
+    ) async throws {
+       if bearer.token == "foo" {
+           request.auth.login(User(name: "Vapor"))
+       }
+   }
+}
+
+struct User: Authenticatable {
+    var name: String
+}
+
