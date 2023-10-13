@@ -21,33 +21,15 @@ func routes(_ app: Application) throws {
     }
     
     protected.get("allusers") { req async throws -> [UserAccess] in
-        try req.auth.require(User.self)
+        try req.auth.require(UserAuthenticatable.self)
         return try await dbController.index(req: req)
     }
     
     protected.get("me") { req -> String in
-        try req.auth.require(User.self)
-        return "El nombre es \(String(describing: req.auth.get(User.self)?.name))"
+        try req.auth.require(UserAuthenticatable.self)
+        return "El nombre es \(String(describing: req.auth.get(UserAuthenticatable.self)?.name))"
     }
     
     try app.register(collection: TodoController())
     try app.register(collection: UserController())
 }
-
-struct UserAuthenticator: AsyncBearerAuthenticator {
-    typealias User = App.User
-
-    func authenticate(
-        bearer: BearerAuthorization,
-        for request: Request
-    ) async throws {
-       if bearer.token == "foo" {
-           request.auth.login(User(name: "Vapor"))
-       }
-   }
-}
-
-struct User: Authenticatable {
-    var name: String
-}
-
