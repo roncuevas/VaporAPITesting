@@ -21,6 +21,10 @@ func routes(_ app: Application) throws {
         }
     }
     
+    app.get("sample_airbnb") { req async throws -> [ListingsAndReviewsModel] in
+        return try await ListingsAndReviewsModel.query(on: req.db(.init(string: "sample_airbnb"))).all()
+    }
+    
     protected.get("allusers") { req async throws -> [UserModel] in
         try req.auth.require(UserAuthenticatable.self)
         return try await dbController.index(req: req)

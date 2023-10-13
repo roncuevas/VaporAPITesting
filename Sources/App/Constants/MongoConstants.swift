@@ -1,5 +1,15 @@
 import Foundation
 
 struct MongoConstatns {
-    static let connectionString = "mongodb+srv://roncuevas:RCCC7665@cluster0.farfreb.mongodb.net/users"
+    static let user = "roncuevas"
+    static let password = "RCCC7665"
+    static let server = "cluster0.farfreb.mongodb.net"
+    static let database = "users"
+    
+    static func connectionString(user: String = user,
+                                 password: String = password,
+                                 server: String = server,
+                                 database: String = database) -> String {
+        return "mongodb+srv://\(user):\(password)@\(server)/\(database)"
+    }
 }
