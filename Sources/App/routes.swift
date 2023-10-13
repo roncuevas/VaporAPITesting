@@ -30,6 +30,5 @@ func routes(_ app: Application) throws {
         return "El nombre es \(String(describing: req.auth.get(UserAuthenticatable.self)?.name))"
     }
     
-    try app.register(collection: TodoController())
     try app.register(collection: UserController())
 }

@@ -12,7 +12,6 @@ public func configure(_ app: Application) async throws {
         connectionString: MongoConstatns.connectionString
     ), as: .mongo)
 
-    app.migrations.add(CreateTodo())
     app.migrations.add(CreateUsers())
 
     // register routes
