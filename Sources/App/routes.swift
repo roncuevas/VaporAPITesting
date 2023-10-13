@@ -2,6 +2,10 @@ import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
+    
+    let dbController = UserController()
+    let protected = app.grouped(UserAuthenticator())
+    
     app.get { req async in
         req.description
     }
@@ -16,13 +20,18 @@ func routes(_ app: Application) throws {
         }
     }
     
-    let protected = app.grouped(UserAuthenticator())
+    protected.get("allusers") { req async throws -> [UserAccess] in
+        try req.auth.require(User.self)
+        return try await dbController.index(req: req)
+    }
+    
     protected.get("me") { req -> String in
         try req.auth.require(User.self)
         return "El nombre es \(String(describing: req.auth.get(User.self)?.name))"
     }
     
     try app.register(collection: TodoController())
+    try app.register(collection: UserController())
 }
 
 struct UserAuthenticator: AsyncBearerAuthenticator {

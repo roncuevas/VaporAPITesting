@@ -4,7 +4,8 @@ import PackageDescription
 let package = Package(
     name: "VaporAPITesting",
     platforms: [
-       .macOS(.v12)
+        .iOS(.v15),
+        .macOS(.v13)
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
