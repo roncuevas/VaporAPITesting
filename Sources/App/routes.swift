@@ -5,6 +5,7 @@ func routes(_ app: Application) throws {
     
     let dbController = UserController()
     let protected = app.grouped(UserAuthenticator())
+    let middleWare = app.grouped(UserAuthenticator())
     
     app.get { req async in
         req.description
@@ -20,7 +21,7 @@ func routes(_ app: Application) throws {
         }
     }
     
-    protected.get("allusers") { req async throws -> [UserAccess] in
+    protected.get("allusers") { req async throws -> [UserModel] in
         try req.auth.require(UserAuthenticatable.self)
         return try await dbController.index(req: req)
     }

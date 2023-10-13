@@ -2,7 +2,7 @@ import Fluent
 import Vapor
 import BSON
 
-final class UserAccess: Model, Content {
+final class UserModel: Model, Content {
     static let schema = "access"
     
     @ID(custom: .id, generatedBy: .database)
