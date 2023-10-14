@@ -5,7 +5,8 @@ func routes(_ app: Application) throws {
     
     let dbController = UserController()
     let protected = app.grouped(UserAuthenticator())
-    let middleWare = app.grouped(UserAuthenticator())
+    // let file = FileMiddleware(publicDirectory: app.directory.publicDirectory)
+    // app.middleware.use(file)
     
     app.get { req async in
         req.description
@@ -22,7 +23,7 @@ func routes(_ app: Application) throws {
     }
     
     app.get("sample_airbnb") { req async throws -> [ListingsAndReviewsModel] in
-        return try await ListingsAndReviewsModel.query(on: req.db(.init(string: "sample_airbnb"))).all()
+        return try await ListingsAndReviewsModel.query(on: req.db(.sampleAirbnb)).all()
     }
     
     protected.get("allusers") { req async throws -> [UserModel] in
