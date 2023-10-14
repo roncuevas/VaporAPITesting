@@ -5,8 +5,8 @@ func routes(_ app: Application) throws {
     
     let dbController = UserController()
     let protected = app.grouped(UserAuthenticator())
-    // let file = FileMiddleware(publicDirectory: app.directory.publicDirectory)
-    // app.middleware.use(file)
+    let file = FileMiddleware(publicDirectory: app.directory.publicDirectory)
+    app.middleware.use(file)
     
     app.get { req async in
         req.description
