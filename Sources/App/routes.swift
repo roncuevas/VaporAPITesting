@@ -5,6 +5,7 @@ func routes(_ app: Application) throws {
     
     let dbController = UserController()
     let protected = app.grouped(UserAuthenticator())
+    let fileRedirectMiddleWare = app.grouped(FileRedirectMiddleware())
     let file = FileMiddleware(publicDirectory: app.directory.publicDirectory)
     app.middleware.use(file)
     
@@ -20,6 +21,16 @@ func routes(_ app: Application) throws {
         req.client.get(URI(string: "https://randomuser.me/api/")).flatMap { response in
             return response.encodeResponse(for: req)
         }
+    }
+    
+    fileRedirectMiddleWare.get("files", ":fileName") { req in
+        return "No file was found"
+    }
+    
+    app.get("login", ":user", ":password") { req in
+        let user = req.parameters.get("user")!
+        let password = req.parameters.get("password")!
+        return "Hello \(user) with \(password)"
     }
     
     app.get("sample_airbnb") { req async throws -> [ListingsAndReviewsModel] in
