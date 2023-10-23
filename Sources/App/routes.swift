@@ -9,7 +9,7 @@ func routes(_ app: Application) throws {
     let file = FileMiddleware(publicDirectory: app.directory.publicDirectory)
     app.middleware.use(file)
     
-    app.get { req async in
+    app.get("info") { req async in
         req.description
     }
 

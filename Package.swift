@@ -4,6 +4,7 @@ import PackageDescription
 let package = Package(
     name: "VaporAPITesting",
     platforms: [
+        .iOS(.v15),
        .macOS(.v13)
     ],
     dependencies: [
@@ -21,6 +22,12 @@ let package = Package(
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentMongoDriver", package: "fluent-mongo-driver"),
                 .product(name: "Vapor", package: "vapor"),
+            ],
+            swiftSettings: [
+                // Enable better optimizations when building in Release configuration. Despite the use of
+                // the `.unsafeFlags` construct required by SwiftPM, this flag is recommended for Release
+                // builds. See <https://www.swift.org/server/guides/building.html#building-for-production> for details.
+                .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
             ]
         ),
         .testTarget(name: "AppTests", dependencies: [
